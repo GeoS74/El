@@ -203,7 +203,7 @@ Unit.prototype = Object.create(Backend.prototype);
 
 Unit.prototype.constructor = Unit;
 
-Unit.prototype.update = function(){}; //это не будет вызвано
+Unit.prototype.update = function(){}; //don`t call this
 
 Unit.prototype.handler = function(){return this.update;}; //Override this function
 
@@ -241,9 +241,9 @@ Object.defineProperties(
 
 function El(html, model) //extends Unit
 {
-	this.parentNode = document.body; 	//type object
-	this.elem = null; 	//type object
-	this.error; 	//type object
+	this.parentNode = document.body;
+	this.elem = null;
+	this.error;
 
 	if(html) this.create(html);
 
@@ -282,24 +282,6 @@ El.prototype.render = function(type, html)
 	}
 	return this;
 };
-
-/*
-El.prototype.__render = function(type)
-{
-	if(type == 'prepend') this.parentNode.prepend(this.elem);
-	else if(type == 'before') this.parentNode.before(this.elem);
-	else if(type == 'after') this.parentNode.after(this.elem);
-	else this.parentNode.append(this.elem);
-	return this;
-};
-
-El.prototype.renderer = function(html, type)
-{
-	this.elem.insertAdjacentHTML((type || 'afterend'), html);
-	return this;
-}
-*/
-
 
 El.prototype.create = function(html)
 {
@@ -340,9 +322,9 @@ El.prototype.off = function(event){};
 El.prototype.wrap = function(html)
 {
 	let div = document.createElement('div');
-	div.insertAdjacentHTML('afterbegin', html); //вставить обертку во временный div
-	this.elem.after(div.firstElementChild); //спозиционировать обёртку
-	this.elem.nextElementSibling.append(this.elem); //переместить элемент
+	div.insertAdjacentHTML('afterbegin', html);
+	this.elem.after(div.firstElementChild);
+	this.elem.nextElementSibling.append(this.elem);
 	return this;
 };
 
