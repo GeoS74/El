@@ -152,22 +152,25 @@ Backend.prototype.setData = function(data)
 	return this;
 };
 
-Backend.prototype.query = function()
-{
+Backend.prototype.query = function(method, path, data)
+{          
 	let foo = async function(){
-		let response = await fetch(this.backend.path, {
-			method: this.backend.method,
+		path = path || this.backend.path;
+		method = method || this.backend.method;
+		data = data || this.backend.data;
+		let response = await fetch(path, {
+			method: method,
 			headers: {},
-			body: this.backend.method !== 'GET' ? this.backend.data : null,
+			body: method !== 'GET' ? data : null,
 		});
 
 		try{
 			this.setVal(await response.json());
-		}catch(error){
+        }catch(error){
 			console.log(error);
 		}
-    }.call(this);
-    return this;
+	}.call(this);
+	return this;
 };
 
 Object.defineProperties(
@@ -241,9 +244,9 @@ Object.defineProperties(
 
 function El(html, model) //extends Unit
 {
-	this.parentNode = document.body;
-	this.elem = null;
-	this.error;
+	this.parentNode = document.body; 	//type object
+	this.elem = null; 	//type object
+	this.error; 	//type object
 
 	if(html) this.create(html);
 
@@ -282,6 +285,24 @@ El.prototype.render = function(type, html)
 	}
 	return this;
 };
+
+/*
+El.prototype.__render = function(type)
+{
+	if(type == 'prepend') this.parentNode.prepend(this.elem);
+	else if(type == 'before') this.parentNode.before(this.elem);
+	else if(type == 'after') this.parentNode.after(this.elem);
+	else this.parentNode.append(this.elem);
+	return this;
+};
+
+El.prototype.renderer = function(html, type)
+{
+	this.elem.insertAdjacentHTML((type || 'afterend'), html);
+	return this;
+}
+*/
+
 
 El.prototype.create = function(html)
 {
@@ -322,9 +343,9 @@ El.prototype.off = function(event){};
 El.prototype.wrap = function(html)
 {
 	let div = document.createElement('div');
-	div.insertAdjacentHTML('afterbegin', html);
-	this.elem.after(div.firstElementChild);
-	this.elem.nextElementSibling.append(this.elem);
+	div.insertAdjacentHTML('afterbegin', html); //insert wrap to temp div
+	this.elem.after(div.firstElementChild); //new position wrap
+	this.elem.nextElementSibling.append(this.elem); //elem move
 	return this;
 };
 
